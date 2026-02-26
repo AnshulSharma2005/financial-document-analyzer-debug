@@ -2,7 +2,7 @@
 from crewai import Task
 
 from agents import financial_analyst, verifier
-from tools import search_tool, FinancialDocumentTool
+from tools import FinancialDocumentTool
 
 ## Creating a task to help solve user's query
 analyze_financial_document = Task(
