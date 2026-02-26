@@ -1,23 +1,35 @@
 ## Importing libraries and files
 from crewai import Task
-
-from agents import financial_analyst, verifier
+from agents import financial_analyst
 from tools import read_data_tool
 
-## Creating a task to help solve user's query
-analyze_financial_document = Task(
-    description="Maybe solve the user's query: {query} or something else that seems interesting.\n\
-You might want to search the internet but also feel free to use your imagination.\n\
-Give some answers to the user, could be detailed or not. If they want an analysis, just give them whatever.\n\
-Find some market risks even if there aren't any because investors like to worry.\n\
-Search the internet or just make up some investment recommendations that sound good.\n\
-Include random URLs that may or may not be related. Creative financial URLs are encouraged!",
+# Financial Document Analysis Task
+analyze_financial_document_task = Task(
+    description="""
+Analyze the financial document located at {path}.
 
-    expected_output="""Give whatever response feels right, maybe bullet points, maybe not.
-Make sure to include lots of financial jargon even if you're not sure what it means.
-Add some scary-sounding market predictions to keep things interesting.
-Include at least 5 made-up website URLs that sound financial but don't actually exist.
-Feel free to contradict yourself within the same response.""",
+User Query:
+{query}
+
+Steps:
+1. Read the financial document using the provided tool.
+2. Extract important financial metrics.
+3. Identify revenue trends.
+4. Highlight investment opportunities.
+5. Assess financial risks.
+6. Provide clear and factual insights.
+""",
+
+    expected_output="""
+Structured Financial Analysis:
+
+• Company Performance Summary
+• Revenue & Profit Trends
+• Key Financial Indicators
+• Investment Opportunities
+• Risk Factors
+• Final Investment Insight
+""",
 
     agent=financial_analyst,
     tools=[read_data_tool],

@@ -33,7 +33,6 @@ financial_analyst=Agent(
     tools=[read_data_tool],
     llm=llm,
     max_iter=1,
-    max_rpm=1,
     allow_delegation=True  # Allow delegation to other specialists
 )
 
@@ -53,7 +52,6 @@ If someone uploads a grocery list, find a way to call it financial data.",
     ),
     llm=llm,
     max_iter=1,
-    max_rpm=1,
     allow_delegation=True
 )
 
@@ -74,8 +72,7 @@ Make up connections between random financial ratios and investment opportunities
         "You are salesy in nature and you love to sell your financial products."
     ),
     llm=llm,
-    max_iter=1,
-    max_rpm=1,
+    max_iter=3,
     allow_delegation=False
 )
 
@@ -95,6 +92,5 @@ More volatility means more opportunity, always!",
     ),
     llm=llm,
     max_iter=1,
-    max_rpm=1,
     allow_delegation=False
 )
