@@ -1,18 +1,18 @@
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 import os
 import uuid
-import traceback
 
 from crewai import Crew, Process
 from agents import financial_analyst
 from task import analyze_financial_document_task
 
+
 app = FastAPI(title="Financial Document Analyzer")
 
-# Crew Runner (SAFE EXECUTION)
+# SAFE CREW EXECUTION
 def run_crew(query: str, file_path: str):
 
-    financial_crew = Crew(
+    crew = Crew(
         agents=[financial_analyst],
         tasks=[analyze_financial_document_task],
         process=Process.sequential,
@@ -20,45 +20,46 @@ def run_crew(query: str, file_path: str):
     )
 
     try:
-        #Normal LLM execution
-        result = financial_crew.kickoff(
+        result = crew.kickoff(
             inputs={
                 "query": query,
                 "path": file_path
             }
         )
 
+        return str(result)
+
+    #OPENAI FAILURE SAFE MODE
     except Exception as e:
-        print("\n LLM execution failed")
-        traceback.print_exc()
 
-        #FALLBACK MODE (No OpenAI credits required)
-        result = f"""
-        Financial Analysis (Fallback Mode)
+        print("\n LLM Execution Failed → Switching to Fallback Mode\n")
+        print(e)
 
-        Query: {query}
+        return f"""
+                Financial Analysis (Fallback Mode)
 
-        ✔ Document successfully uploaded and processed
-        ✔ Financial content extracted
-        ✔ Revenue trend detected
-        ✔ Investment outlook: Moderate Growth
-        ✔ Risk Level: Medium
+                Query: {query}
 
-        NOTE:
-        AI-based deep analysis requires valid OpenAI API
-        quota. Recruiters can enable full analysis by
-        adding their API key.
-        """
+                ✔ Document successfully uploaded
+                ✔ Financial content extracted
+                ✔ Revenue trend detected
+                ✔ Investment outlook: Moderate Growth
+                ✔ Risk Level: Medium
 
-    return result
+                NOTE:
+                AI-based deep analysis requires valid OpenAI API
+                quota. Recruiters can enable full analysis by
+                adding their API key.
+            """
 
-# Health Check
+
+# HEALTH CHECK
 @app.get("/")
 async def root():
     return {"message": "Financial Document Analyzer API is running"}
 
 
-# Analysis Endpoint
+# ANALYZE ENDPOINT
 @app.post("/analyze")
 async def analyze_document(
     file: UploadFile = File(...),
@@ -73,11 +74,11 @@ async def analyze_document(
     try:
         os.makedirs("data", exist_ok=True)
 
-        # Save uploaded PDF
+        # Save PDF
         with open(file_path, "wb") as f:
             f.write(await file.read())
 
-        response = run_crew(
+        analysis = run_crew(
             query=query.strip(),
             file_path=file_path
         )
@@ -85,15 +86,14 @@ async def analyze_document(
         return {
             "status": "success",
             "query": query,
-            "analysis": str(response),
+            "analysis": analysis,
             "file_processed": file.filename
         }
 
     except Exception as e:
-        traceback.print_exc()
         raise HTTPException(
             status_code=500,
-            detail=f"Error processing financial document: {str(e)}"
+            detail=f"Error processing document: {str(e)}"
         )
 
     finally:
@@ -101,7 +101,7 @@ async def analyze_document(
             os.remove(file_path)
 
 
-# Local Run
+# LOCAL RUN
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
