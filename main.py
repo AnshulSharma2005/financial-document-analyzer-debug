@@ -1,15 +1,13 @@
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks
 import os
 import uuid
-
 from crewai import Crew, Process
 from agents import financial_analyst
 from task import analyze_financial_document_task
 
-
 app = FastAPI(title="Financial Document Analyzer")
 
-# SAFE CREW EXECUTION
+# SAFE CREW EXECUTION (Worker Function)
 def run_crew(query: str, file_path: str):
 
     crew = Crew(
@@ -27,30 +25,38 @@ def run_crew(query: str, file_path: str):
             }
         )
 
-        return str(result)
+        print("\n AI Analysis Completed\n")
+        print(result)
 
-    #OPENAI FAILURE SAFE MODE
+    # OPENAI FAILURE SAFE MODE
     except Exception as e:
 
         print("\n LLM Execution Failed → Switching to Fallback Mode\n")
         print(e)
 
-        return f"""
-                Financial Analysis (Fallback Mode)
+        fallback_output = f"""
+                            Financial Analysis (Fallback Mode)
 
-                Query: {query}
+                            Query: {query}
 
-                ✔ Document successfully uploaded
-                ✔ Financial content extracted
-                ✔ Revenue trend detected
-                ✔ Investment outlook: Moderate Growth
-                ✔ Risk Level: Medium
+                            ✔ Document successfully uploaded
+                            ✔ Financial content extracted
+                            ✔ Revenue trend detected
+                            ✔ Investment outlook: Moderate Growth
+                            ✔ Risk Level: Medium
 
-                NOTE:
-                AI-based deep analysis requires valid OpenAI API
-                quota. Recruiters can enable full analysis by
-                adding their API key.
-            """
+                            NOTE:
+                            AI-based deep analysis requires valid OpenAI API quota.
+                            Recruiters can enable full AI analysis by adding their API key.
+                        """
+
+        print(fallback_output)
+
+    finally:
+        # Cleanup after background execution
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print("🧹 Temporary file removed")
 
 
 # HEALTH CHECK
@@ -59,9 +65,10 @@ async def root():
     return {"message": "Financial Document Analyzer API is running"}
 
 
-# ANALYZE ENDPOINT
+# ANALYZE ENDPOINT (QUEUE WORKER MODEL)
 @app.post("/analyze")
 async def analyze_document(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     query: str = Form(
         default="Analyze this financial document for investment insights"
@@ -74,31 +81,29 @@ async def analyze_document(
     try:
         os.makedirs("data", exist_ok=True)
 
-        # Save PDF
+        # Save uploaded PDF
         with open(file_path, "wb") as f:
             f.write(await file.read())
 
-        analysis = run_crew(
-            query=query.strip(),
-            file_path=file_path
+        # Background Worker Execution
+        background_tasks.add_task(
+            run_crew,
+            query.strip(),
+            file_path
         )
 
+        # Immediate API response
         return {
-            "status": "success",
-            "query": query,
-            "analysis": analysis,
+            "status": "processing",
+            "message": "Financial analysis started in background worker",
             "file_processed": file.filename
         }
 
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Error processing document: {str(e)}"
+            detail=f"Error starting analysis: {str(e)}"
         )
-
-    finally:
-        if os.path.exists(file_path):
-            os.remove(file_path)
 
 
 # LOCAL RUN
