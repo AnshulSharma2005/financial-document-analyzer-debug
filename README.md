@@ -1,4 +1,4 @@
-# 🚀 Financial Document Analyzer --- CrewAI Debug Challenge (Final Submission)
+<img width="514" height="299" alt="image" src="https://github.com/user-attachments/assets/0406d519-1170-4c25-9b56-d420015c9034" /># 🚀 Financial Document Analyzer --- CrewAI Debug Challenge (Final Submission)
 
 ------------------------------------------------------------------------
 
@@ -81,15 +81,15 @@ redesign, and production‑grade AI reliability engineering**.
 
 ## ✅ Assignment Objectives Covered
 
-  Requirement                    Status
-  ------------------------------ --------
-  Fix deterministic bugs         ✅
-  Resolve dependency conflicts   ✅
-  Optimize inefficient prompts   ✅
-  Restore CrewAI compatibility   ✅
-  Stable execution pipeline      ✅
-  Failure‑safe AI execution      ✅
-  API documentation              ✅
+| Requirement | Status |
+|-------------|--------|
+| Fix deterministic bugs | ✅ |
+| Resolve dependency conflicts | ✅ |
+| Optimize inefficient prompts | ✅ |
+| Restore CrewAI compatibility | ✅ |
+| Stable execution pipeline | ✅ |
+| Failure-safe AI execution | ✅ |
+| API documentation | ✅ |
 
 ------------------------------------------------------------------------
 
