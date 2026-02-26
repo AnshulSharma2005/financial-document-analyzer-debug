@@ -9,9 +9,9 @@ using **CrewAI + FastAPI**, designed to analyze uploaded financial PDFs
 and generate investment insights.
 
 The provided repository intentionally contained: - ❌ Deterministic
-runtime bugs - ❌ Broken dependencies - ❌ Deprecated CrewAI APIs - ❌
-Invalid tool implementations - ❌ Inefficient & hallucination‑driven
-prompts - ❌ API crash scenarios
+runtime bugs\ - ❌ Broken dependencies\ - ❌ Deprecated CrewAI APIs\ - ❌
+Invalid tool implementations\ - ❌ Inefficient & hallucination‑driven
+prompts\ - ❌ API crash scenarios\
 
 This submission demonstrates **systematic debugging, architectural
 correction, and production‑safe AI engineering**.
@@ -20,57 +20,67 @@ correction, and production‑safe AI engineering**.
 
 ## 🧠 System Architecture
 
-                    ┌────────────────────┐
-                    │   User Upload PDF   │
-                    └─────────┬──────────┘
-                              │
-                              ▼
-                    ┌────────────────────┐
-                    │     FastAPI API     │
-                    └─────────┬──────────┘
-                              │
-                              ▼
-                    ┌────────────────────┐
-                    │   CrewAI Orchestrator│
-                    └─────────┬──────────┘
-                              │
-                ┌─────────────┴─────────────┐
-                ▼                           ▼
-       Financial Analyst Agent        PDF Tool
-                │                           │
-                └────────────► Extract Text
-                                        │
-                                        ▼
-                               OpenAI LLM Engine
-                                        │
-                         ┌──────────────┴──────────────┐
-                         ▼                             ▼
-                    AI Analysis                 Fallback Mode
-
+                        ┌──────────────────────┐
+                        │   User Uploads PDF   │
+                        └──────────┬───────────┘
+                                   │
+                                   ▼
+                        ┌──────────────────────┐
+                        │     FastAPI Server   │
+                        │   (/analyze API)     │
+                        └──────────┬───────────┘
+                                   │
+                                   ▼
+                        ┌──────────────────────┐
+                        │   CrewAI Orchestrator│
+                        │   (Task Execution)   │
+                        └──────────┬───────────┘
+                                   │
+                 ┌─────────────────┴─────────────────┐
+                 │                                   │
+                 ▼                                   ▼
+     ┌──────────────────────┐         ┌──────────────────────┐
+     │ Financial Analyst    │         │   PDF Reader Tool    │
+     │ Agent (LLM Agent)    │◄─────── |  Extract Document    │
+     └──────────┬───────────┘         │       Content        │
+                │                     └──────────────────────┘
+                │
+                ▼
+        ┌──────────────────────┐
+        │     OpenAI LLM       │
+        │   (GPT-4o-mini)      │
+        └──────────┬───────────┘
+                   │
+        ┌──────────┴──────────┐
+        ▼                     ▼
+┌─────────────────┐   ┌─────────────────┐
+│   AI Analysis   │   │  Fallback Mode  │
+│ (LLM Available) │   │ (Quota/Error)   │
+└─────────────────┘   └─────────────────┘
 ------------------------------------------------------------------------
 
 ## ⚙️ Tech Stack
 
-  Layer             Technology
+  Layer             Technology\
   ----------------- --------------------
-  Backend           FastAPI
-  Agent Framework   CrewAI
-  LLM               OpenAI GPT‑4o‑mini
-  PDF Processing    PyPDF
-  Environment       python‑dotenv
-  API Server        Uvicorn
+  Backend           FastAPI\
+  Agent Framework   CrewAI\
+  LLM               OpenAI GPT‑4o‑mini\
+  PDF Processing    PyPDF\
+  Environment       python‑dotenv\
+  API Server        Uvicorn\
 
 ------------------------------------------------------------------------
 
-## ✅ Assignment Objectives Covered
+##  Assignment Objectives Covered
 
--   ✅ Fix deterministic bugs\
--   ✅ Resolve dependency conflicts\
--   ✅ Optimize inefficient prompts\
--   ✅ Restore CrewAI compatibility\
--   ✅ Stable execution pipeline\
--   ✅ Failure‑safe LLM execution\
--   ✅ API documentation
+-   Fix deterministic bugs\
+-   Resolve dependency conflicts\
+-   Optimize inefficient prompts\
+-   Restore CrewAI compatibility\
+-   Stable execution pipeline\
+-   Failure‑safe LLM execution\
+-   API documentation
 
 ------------------------------------------------------------------------
 
