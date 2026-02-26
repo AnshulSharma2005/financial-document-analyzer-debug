@@ -1,13 +1,10 @@
 ## Importing libraries and files
 import os
 from dotenv import load_dotenv
+from pypdf import PdfReader
 load_dotenv()
 
 from crewai_tools import tools
-from crewai_tools.tools.serper_dev_tool import SerperDevTool
-
-## Creating search tool
-search_tool = SerperDevTool()
 
 ## Creating custom pdf reader tool
 class FinancialDocumentTool():
@@ -21,7 +18,7 @@ class FinancialDocumentTool():
             str: Full Financial Document file
         """
         
-        docs = Pdf(file_path=path).load()
+        docs = PdfReader(file_path=path).load()
 
         full_report = ""
         for data in docs:

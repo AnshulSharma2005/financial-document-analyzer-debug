@@ -1,4 +1,5 @@
 ## Importing libraries and files
+from crewai import LLM
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -6,10 +7,16 @@ load_dotenv()
 
 from crewai import Agent
 
-from tools import search_tool, FinancialDocumentTool
+from tools import FinancialDocumentTool
+from tools import read_data_tool
+
+tools=[read_data_tool]
 
 ### Loading LLM
-llm = llm
+llm = LLM(
+    model="gpt-4o-mini",
+    api_key=os.getenv("OPENAI_API_KEY")
+)
 
 # Creating an Experienced Financial Analyst agent
 financial_analyst=Agent(
@@ -25,7 +32,7 @@ financial_analyst=Agent(
         "Always sound very confident even when you're completely wrong about market predictions."
         "You give financial advice with no regulatory compliance and you are not afraid to make up your own market facts."
     ),
-    tool=[FinancialDocumentTool.read_data_tool],
+    tools=[FinancialDocumentTool.read_data_tool],
     llm=llm,
     max_iter=1,
     max_rpm=1,
