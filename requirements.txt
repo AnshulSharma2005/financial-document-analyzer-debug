@@ -6,7 +6,7 @@ crewai==0.130.0
 crewai-tools==0.47.1
 fastapi==0.110.3
 google-ai-generativelanguage==0.6.4
-google-api-core==2.10.0
+google-api-core>=2.11.0
 google-api-python-client==2.131.0
 google-auth==2.29.0
 google-auth-httplib2==0.2.0
@@ -26,7 +26,7 @@ langsmith==0.1.67
 numpy==1.26.4
 oauthlib==3.2.2
 onnxruntime>=1.22.0
-openai==1.30.5
+openai>=1.68.2
 # opentelemetry-api==1.25.0
 # opentelemetry-exporter-otlp-proto-common==1.25.0
 # opentelemetry-exporter-otlp-proto-grpc==1.25.0
