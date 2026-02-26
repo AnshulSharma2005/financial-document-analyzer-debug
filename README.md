@@ -37,6 +37,12 @@ redesign, and production‑grade AI reliability engineering**.
                         └──────────┬─────────────┘
                                    │
                                    ▼
+                       ┌────────────────────────────┐
+                       │ Background Worker Execution│
+                       │ (Async Task Processing)    │
+                       └─────────┬──────────────────┘
+                                 │
+                                 ▼
                         ┌────────────────────────┐
                         │   CrewAI Orchestrator  │
                         │   Task Coordination    │
@@ -90,6 +96,58 @@ redesign, and production‑grade AI reliability engineering**.
 | Stable execution pipeline | ✅ |
 | Failure-safe AI execution | ✅ |
 | API documentation | ✅ |
+| Concurrent request handling (Bonus) | ✅ |
+| Queue Worker Architecture (Bonus) | ✅ |
+
+------------------------------------------------------------------------
+## ⚡ Scalability Design
+
+The system is intentionally designed with **enterprise-grade scalability principles**, allowing seamless evolution from a local prototype into a production-ready AI platform.
+
+### 🚀 Future Upgrade Path
+
+| Capability | Planned Upgrade | Benefit |
+|-------------|----------------|---------|
+| Task Queue System | Redis Queue / Celery | Distributed background processing |
+| Worker Execution | Distributed Workers | High concurrency handling |
+| Data Persistence | PostgreSQL / MongoDB | Store analysis history & users |
+| Agent Execution | Async Multi-Agent Pipeline | Faster parallel reasoning |
+| Deployment | Docker + Cloud (AWS/GCP) | Production scalability |
+
+---
+
+### 🧩 Architectural Vision
+
+The current implementation already supports:
+
+- ✅ Non-blocking API execution  
+- ✅ Background worker processing  
+- ✅ Queue-ready architecture  
+
+This enables effortless migration toward:
+Upload → API → Queue → Worker → CrewAI → Database → Response API
+---
+
+### 📈 Engineering Impact
+
+- Improves system throughput  
+- Enables concurrent financial analysis requests  
+- Prevents API blocking under load  
+- Supports enterprise-scale GenAI deployment  
+
+✅ Designed for real-world production environments.
+
+### Database Integration (Planned)
+
+Analysis results can be persisted using:
+
+- PostgreSQL / MongoDB
+- Store uploaded file metadata
+- Store analysis history
+- Enable async result retrieval
+
+Future Flow:
+Upload → Queue → Worker → DB Storage → Result API
 
 ------------------------------------------------------------------------
 
@@ -247,13 +305,12 @@ except Exception:
 
 ### Runtime Behaviour
 
-  Scenario          System Behaviour
-  ----------------- --------------------------
-  Valid API Key     Full AI analysis
-  Quota Exhausted   Safe fallback response
-  No API Key        System still operational
+| Scenario | System Behaviour |
+|----------|------------------|
+| Valid API Key | Full AI analysis |
+| Quota Exhausted | Safe fallback response |
+| No API Key | System operational |
 
-✅ Recruiter demo never fails.
 
 ------------------------------------------------------------------------
 
@@ -317,7 +374,8 @@ The system now:
 ✅ Executes CrewAI agents\
 ✅ Uses OpenAI intelligently\
 ✅ Provides fallback without API quota\
-✅ Never crashes during demo
+✅ Never crashes during demo\
+✅ Handles concurrent requests via background worker model
 
 ------------------------------------------------------------------------
 
