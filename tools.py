@@ -1,11 +1,7 @@
-# ==============================
-# tools.py
-# ==============================
-
 import os
 from dotenv import load_dotenv
 from pypdf import PdfReader
-from crewai_tools import tool
+from crewai.tools import tool
 
 load_dotenv()
 
