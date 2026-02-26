@@ -1,4 +1,4 @@
-<img width="514" height="299" alt="image" src="https://github.com/user-attachments/assets/0406d519-1170-4c25-9b56-d420015c9034" /># 🚀 Financial Document Analyzer --- CrewAI Debug Challenge (Final Submission)
+# 🚀 Financial Document Analyzer --- CrewAI Debug Challenge (Final Submission)
 
 ------------------------------------------------------------------------
 
