@@ -124,7 +124,7 @@ The current implementation already supports:
 - ✅ Background worker processing  
 - ✅ Queue-ready architecture  
 
-This enables effortless migration toward:
+This enables effortless migration toward:\
 Upload → API → Queue → Worker → CrewAI → Database → Response API
 ---
 
